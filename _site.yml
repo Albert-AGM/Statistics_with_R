@@ -5,8 +5,10 @@ navbar:
   left:
     - text: "Home"
       href: index.html
-    - text: "EDA ames"
+    - text: "EDA"
       href: EDA_ames.html
+    - text: "Final Analysis"
+      href: final_analysis.html
 output:
   html_document:
 

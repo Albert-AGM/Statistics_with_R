@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Final Data Analysis</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Statistics with R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="EDA_ames.html">EDA</a>
+</li>
+<li>
+  <a href="final_analysis.html">Final Analysis</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Final Data Analysis</h1>
+
+</div>
+
+
+<div id="training-data-and-relevant-packages" class="section level1">
+<h1>Training Data and relevant packages</h1>
+<p>In order to better assess the quality of the model you will produce, the data have been randomly divided into three separate pieces: a training data set, a testing data set, and a validation data set. For now we will load the training data set, the others will be loaded and used later.</p>
+<pre class="r"><code>rm(list = ls())
+load(&quot;ames_train.Rdata&quot;)</code></pre>
+<p>Use the code block below to load any necessary packages</p>
+<pre class="r"><code>library(statsr)
+library(dplyr)
+library(BAS)
+library(ggplot2)
+library(gridExtra)
+library(gdata)
+library(MASS)
+library(GGally)
+library(corrplot)
+source(&#39;r_functions.R&#39;)</code></pre>
+<div id="part-1---exploratory-data-analysis-eda" class="section level2">
+<h2>Part 1 - Exploratory Data Analysis (EDA)</h2>
+<p>When you first get your data, it’s very tempting to immediately begin fitting models and assessing how they perform. However, before you begin modeling, it’s absolutely essential to explore the structure of the data and the relationships between the variables in the data set.</p>
+<p>Do a detailed EDA of the ames_train data set, to learn about the structure of the data and the relationships between the variables in the data set (refer to Introduction to Probability and Data, Week 2, for a reminder about EDA if needed). Your EDA should involve creating and reviewing many plots/graphs and considering the patterns and relationships you see.</p>
+<p>After you have explored completely, submit the three graphs/plots that you found most informative during your EDA process, and briefly explain what you learned from each (why you found each informative).</p>
+<hr />
+<p>The aim of this project is to predict the selling price of a given home. Consequently, the first thing we would have to do is to see the distributions of the prices in order to explore the data.</p>
+<pre class="r"><code>ggplot(ames_train, aes(price / 1000)) +
+    geom_histogram(aes(y = ..density..), bins = 30, colour = &#39;black&#39;, fill =       &#39;white&#39;) +
+    geom_density(fill=&quot;blue&quot;, alpha = 0.2) +
+    labs(x = &#39;Price (in thousand of dollars)&#39;, title = &#39;Price distribution&#39;)</code></pre>
+<p><img src="final_analysis_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<pre class="r"><code>ames_train &lt;- ames_train %&gt;% 
+  mutate(ages = 2019 - Year.Built) </code></pre>
+<p>We see on the graph above that the distribution of prices is right-skewed. It is obvious due to there is a boundary in 0 dollars, and despite the majority of houses’ price are between 100 000 dollars and 200 000 dollars there are a few over those values. The plot show us the distribution for individual residential propoerties sold in Ames from 2006 to 2010.</p>
+<p>Next, we are going to examine the age of the properties.</p>
+<pre class="r"><code>ames_train &lt;- ames_train %&gt;% 
+  mutate(ages = 2019 - Year.Built) 
+
+ggplot(ames_train,aes(ages)) +
+  geom_histogram(aes(y = ..density..), bins = 30, colour = &#39;black&#39;, fill = &#39;white&#39;) +
+    geom_density(fill=&quot;blue&quot;, alpha = 0.2) + 
+  labs(x = &#39;Ages of the houses in years&#39;, y = &#39;Number of houses&#39;, title = &#39;Ages of the houses in the data set (Acutal year - Year built)&#39;)  + 
+  scale_x_continuous(breaks = seq(0,160,10)) </code></pre>
+<p><img src="final_analysis_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>In this graph, we can see that there are a lot of properties built between 10 and 20 years ago. So the majority of them are new ones. We notice that there is a notable decreasing in 25-40 year old properties. This fact deserves further investigation. Those properties belong to the period from 1979 to 1994. There is another peak in 40-70 year old properties (period from 1979 to 1949). Maybe the cause of so much properties being constructed from 1949 is that the end of the second world war was in 1945 and the society began to be more confident investing money on the construction sector.</p>
+<p>Finally, we explore the relationship between the general zoning classification of the sale and the price of the property.</p>
+<pre class="r"><code>ames_train$MS.Zoning &lt;- as.factor(ames_train$MS.Zoning)
+
+ggplot(ames_train, aes(MS.Zoning, price / 1000)) +
+   geom_boxplot(aes(fill = MS.Zoning)) +
+  labs(x = &#39;MS Zoning Code&#39;, y = &#39;Price (in thousand of dollars)&#39;, title = &#39;Price by zoning classification of the sale&#39;) +
+  scale_fill_discrete(name = &quot;MS Zoning&quot;, labels = c(&quot;Commercial&quot;,&quot;Floating Village Residential&quot;,&quot;Industrial&quot;,&quot;Residential High Density&quot;,&quot;Residential Low Density&quot;,&quot;Residential Medium Density&quot;))</code></pre>
+<p><img src="final_analysis_files/figure-html/creategraphs-1.png" width="672" /></p>
+<p>We notice that properties classified as Floating Village Residential have a higher median over all the others. On the other hand, Commercial properties have the lowest. We can also observe that there are a lot of outliers in properties classified as Residential Low Density. Probably because on this type of properties we can find two situations. Houses in poor zones, where the houses are separated from each other and have low value. And richer neighbourhoods with big houses where the houses are also separated from each other.</p>
+<hr />
+</div>
+<div id="part-2---development-and-assessment-of-an-initial-model-following-a-semi-guided-process-of-analysis" class="section level2">
+<h2>Part 2 - Development and assessment of an initial model, following a semi-guided process of analysis</h2>
+<div id="section-2.1-an-initial-model" class="section level3">
+<h3>Section 2.1 An Initial Model</h3>
+<p>In building a model, it is often useful to start by creating a simple, intuitive initial model based on the results of the exploratory data analysis. (Note: The goal at this stage is <strong>not</strong> to identify the “best” possible model but rather to choose a reasonable and understandable starting point. Later you will expand and revise this model to create your final model.</p>
+<p>Based on your EDA, select <em>at most</em> 10 predictor variables from “ames_train” and create a linear model for <code>price</code> (or a transformed version of price) using those variables. Provide the <em>R code</em> and the <em>summary output table</em> for your model, a <em>brief justification</em> for the variables you have chosen, and a <em>brief discussion</em> of the model results in context (focused on the variables that appear to be important predictors and how they relate to sales price).</p>
+<hr />
+<p>From the previous EDA (not all the relationships explored are included in the previous section), we fit a model with the following parameters:</p>
+<ul>
+<li>Ms SubClass</li>
+<li>Ms Zoning</li>
+<li>Lot Frontage</li>
+<li>Lot Area</li>
+<li>Neighborhood</li>
+<li>Bldg Type</li>
+<li>House Style</li>
+<li>Overall Qual</li>
+<li>Year Built</li>
+<li>Beedroom</li>
+</ul>
+<p>I have chosen these variables based on personal opinion about variables that can affect the price of a property and from the EDA done before. The response variable will be the logarithmic transformation of the variable price.</p>
+<pre class="r"><code>m1 &lt;- lm(log(price) ~ MS.SubClass + MS.Zoning + Lot.Frontage + Lot.Area+ Neighborhood + Bldg.Type + House.Style + Overall.Qual + Year.Built + Bedroom.AbvGr, data = ames_train)
+summary(m1)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = log(price) ~ MS.SubClass + MS.Zoning + Lot.Frontage + 
+##     Lot.Area + Neighborhood + Bldg.Type + House.Style + Overall.Qual + 
+##     Year.Built + Bedroom.AbvGr, data = ames_train)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.59162 -0.09962  0.00077  0.10365  0.89194 
+## 
+## Coefficients:
+##                       Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)          4.104e+00  1.082e+00   3.792 0.000161 ***
+## MS.SubClass         -7.535e-04  7.492e-04  -1.006 0.314831    
+## MS.ZoningFV          2.884e-01  9.691e-02   2.975 0.003015 ** 
+## MS.ZoningRH          3.783e-01  1.137e-01   3.327 0.000918 ***
+## MS.ZoningRL          3.762e-01  8.088e-02   4.651 3.87e-06 ***
+## MS.ZoningRM          2.785e-01  7.352e-02   3.787 0.000164 ***
+## Lot.Frontage         5.131e-04  3.906e-04   1.314 0.189338    
+## Lot.Area             4.754e-06  8.761e-07   5.426 7.66e-08 ***
+## NeighborhoodBlueste  9.126e-03  1.408e-01   0.065 0.948340    
+## NeighborhoodBrDale  -1.591e-01  1.104e-01  -1.441 0.149870    
+## NeighborhoodBrkSide  1.723e-02  9.585e-02   0.180 0.857351    
+## NeighborhoodClearCr  4.595e-02  1.177e-01   0.390 0.696450    
+## NeighborhoodCollgCr -4.272e-02  7.886e-02  -0.542 0.588181    
+## NeighborhoodCrawfor  2.073e-01  9.039e-02   2.294 0.022074 *  
+## NeighborhoodEdwards -5.059e-02  8.260e-02  -0.613 0.540356    
+## NeighborhoodGilbert -7.885e-02  8.240e-02  -0.957 0.338938    
+## NeighborhoodGreens   1.346e-02  1.331e-01   0.101 0.919473    
+## NeighborhoodIDOTRR  -2.614e-02  1.042e-01  -0.251 0.802065    
+## NeighborhoodMeadowV -8.569e-02  1.015e-01  -0.844 0.398787    
+## NeighborhoodMitchel  2.702e-02  8.347e-02   0.324 0.746263    
+## NeighborhoodNAmes   -8.682e-03  8.093e-02  -0.107 0.914595    
+## NeighborhoodNoRidge  1.465e-01  8.847e-02   1.656 0.098220 .  
+## NeighborhoodNPkVill -1.834e-02  1.247e-01  -0.147 0.883159    
+## NeighborhoodNridgHt  1.997e-01  7.844e-02   2.546 0.011087 *  
+## NeighborhoodNWAmes  -1.067e-02  8.523e-02  -0.125 0.900453    
+## NeighborhoodOldTown  8.351e-03  9.835e-02   0.085 0.932358    
+## NeighborhoodSawyer  -1.467e-02  8.451e-02  -0.174 0.862242    
+## NeighborhoodSawyerW -7.048e-02  8.131e-02  -0.867 0.386319    
+## NeighborhoodSomerst  1.047e-01  8.768e-02   1.195 0.232580    
+## NeighborhoodStoneBr  2.018e-01  8.644e-02   2.335 0.019800 *  
+## NeighborhoodSWISU   -6.011e-02  1.028e-01  -0.585 0.558883    
+## NeighborhoodTimber   7.266e-02  9.016e-02   0.806 0.420533    
+## NeighborhoodVeenker  1.872e-01  1.007e-01   1.859 0.063381 .  
+## Bldg.Type2fmCon      1.679e-01  1.064e-01   1.578 0.114978    
+## Bldg.TypeDuplex     -4.122e-02  5.296e-02  -0.778 0.436618    
+## Bldg.TypeTwnhs      -9.168e-02  9.146e-02  -1.002 0.316459    
+## Bldg.TypeTwnhsE     -1.488e-02  8.279e-02  -0.180 0.857409    
+## House.Style1.5Unf   -1.827e-01  7.242e-02  -2.523 0.011820 *  
+## House.Style1Story   -6.967e-02  3.281e-02  -2.124 0.033999 *  
+## House.Style2.5Unf    4.794e-02  7.522e-02   0.637 0.524131    
+## House.Style2Story   -4.562e-04  3.009e-02  -0.015 0.987906    
+## House.StyleSFoyer    2.704e-02  5.218e-02   0.518 0.604429    
+## House.StyleSLvl     -2.565e-02  5.062e-02  -0.507 0.612486    
+## Overall.Qual         1.653e-01  7.807e-03  21.177  &lt; 2e-16 ***
+## Year.Built           3.251e-03  5.382e-04   6.040 2.37e-09 ***
+## Bedroom.AbvGr        4.307e-02  1.093e-02   3.941 8.84e-05 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.1902 on 787 degrees of freedom
+##   (167 observations deleted due to missingness)
+## Multiple R-squared:  0.8221, Adjusted R-squared:  0.8119 
+## F-statistic: 80.82 on 45 and 787 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>We can see how this not best but reasonable model explains 82 % of the variability on the response variable. Notice variables such as MS SubClass are not significant for the model, with a p-value higher than 0,05. Other variables such as Lot Frontage, Bldg Type are neither significant. The variable with the lowest p-value is Overall Qual, meaning that is very important predicting the response variable. Remaining all the other variables constant, an increase of 1 point on the Overall Quality results in an increase on an average of the 18 % of the price.</p>
+<p>Next, we are going to compare the model assumptions of this model with another model (using the variable price as the response variable without the logarithmic transformation).</p>
+<pre class="r"><code>library(broom)
+
+m1_aug &lt;- augment(m1)
+
+p1_1 &lt;- ggplot(m1_aug, aes(.resid)) + 
+  geom_histogram() + 
+  xlab(&#39;Residuals [log(price)]&#39;)
+
+p2_1 &lt;- ggplot(m1_aug) +
+  geom_qq(aes(sample = .std.resid)) +
+  geom_abline(slope = 1, intercept = 0, linetype = &#39;dashed&#39;) +
+  labs(x = &#39;Theoretical quantiles  [log(price)]&#39;, y = &#39;Standardized residuals&#39;)
+
+p3_1 &lt;- ggplot(m1_aug, aes(.fitted, .resid)) +
+  geom_point(alpha = 0.6) +
+  geom_hline(yintercept = 0, linetype = &#39;dashed&#39;) +
+  labs(x = &#39;Fitted Values  [log(price)]&#39;, y= &#39;Residuals&#39;)
+
+m2 &lt;- lm(price ~ MS.SubClass + MS.Zoning + Lot.Frontage + Lot.Area+ Neighborhood + Bldg.Type + House.Style + Overall.Qual + Year.Built + Bedroom.AbvGr, data = ames_train)
+
+m2_aug &lt;- augment(m2)
+
+p1_2 &lt;- ggplot(m2_aug, aes(.resid)) + 
+  geom_histogram() + 
+  xlab(&#39;Residuals&#39;)
+
+p2_2 &lt;- ggplot(m2_aug) +
+  geom_qq(aes(sample = .std.resid)) +
+  geom_abline(slope = 1, intercept = 0, linetype = &#39;dashed&#39;) +
+  labs(x = &#39;Theoretical quantiles&#39;, y = &#39;Standardized residuals&#39;)
+
+p3_2 &lt;- ggplot(m2_aug, aes(.fitted, .resid)) +
+  geom_point(alpha = 0.6) +
+  geom_hline(yintercept = 0, linetype = &#39;dashed&#39;) +
+  labs(x = &#39;Fitted Values&#39;, y= &#39;Residuals&#39;)
+
+
+grid.arrange(p1_1, p1_2, p2_1, p2_2, p3_1, p3_2, ncol=2, nrow = 3)</code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="final_analysis_files/figure-html/fit_model-1.png" width="672" /></p>
+<p>Notice that with the logarithmic transformation of price the model assumptions necessary for the linear regression are best met. The variance of the residuals is more constant.</p>
+<hr />
+</div>
+<div id="section-2.2-model-selection" class="section level3">
+<h3>Section 2.2 Model Selection</h3>
+<p>Now either using <code>BAS</code> another stepwise selection procedure choose the “best” model you can, using your initial model as your starting point. Try at least two different model selection methods and compare their results. Do they both arrive at the same model or do they disagree? What do you think this means?</p>
+<hr />
+<p>We are going to use the function stepAIC from the library MASS in order to perform feature selection. First we use the penalized-likelihood criteria AIC.</p>
+<pre class="r"><code>n &lt;- nrow(m1$model)
+
+m3 &lt;- lm(`log(price)` ~ ., data = m1$model)
+
+model_1_AIC &lt;- stepAIC(m3, k =2, trace = TRUE)</code></pre>
+<pre><code>## Start:  AIC=-2720.44
+## `log(price)` ~ MS.SubClass + MS.Zoning + Lot.Frontage + Lot.Area + 
+##     Neighborhood + Bldg.Type + House.Style + Overall.Qual + Year.Built + 
+##     Bedroom.AbvGr
+## 
+##                 Df Sum of Sq    RSS     AIC
+## - MS.SubClass    1    0.0366 28.504 -2721.4
+## - Lot.Frontage   1    0.0624 28.530 -2720.6
+## &lt;none&gt;                       28.467 -2720.4
+## - House.Style    6    0.4450 28.912 -2719.5
+## - Bldg.Type      4    0.5651 29.032 -2712.1
+## - Bedroom.AbvGr  1    0.5618 29.029 -2706.2
+## - MS.Zoning      4    0.8897 29.357 -2702.8
+## - Lot.Area       1    1.0651 29.532 -2691.8
+## - Year.Built     1    1.3197 29.787 -2684.7
+## - Neighborhood  25    4.1199 32.587 -2657.8
+## - Overall.Qual   1   16.2213 44.688 -2346.8
+## 
+## Step:  AIC=-2721.37
+## `log(price)` ~ MS.Zoning + Lot.Frontage + Lot.Area + Neighborhood + 
+##     Bldg.Type + House.Style + Overall.Qual + Year.Built + Bedroom.AbvGr
+## 
+##                 Df Sum of Sq    RSS     AIC
+## - Lot.Frontage   1    0.0599 28.564 -2721.6
+## &lt;none&gt;                       28.504 -2721.4
+## - House.Style    6    0.4686 28.972 -2719.8
+## - Bldg.Type      4    0.6906 29.194 -2709.4
+## - Bedroom.AbvGr  1    0.5473 29.051 -2707.5
+## - MS.Zoning      4    0.8809 29.385 -2704.0
+## - Lot.Area       1    1.0637 29.567 -2692.8
+## - Year.Built     1    1.4065 29.910 -2683.2
+## - Neighborhood  25    4.1025 32.606 -2659.4
+## - Overall.Qual   1   16.2179 44.722 -2348.2
+## 
+## Step:  AIC=-2721.63
+## `log(price)` ~ MS.Zoning + Lot.Area + Neighborhood + Bldg.Type + 
+##     House.Style + Overall.Qual + Year.Built + Bedroom.AbvGr
+## 
+##                 Df Sum of Sq    RSS     AIC
+## &lt;none&gt;                       28.564 -2721.6
+## - House.Style    6    0.4484 29.012 -2720.7
+## - Bedroom.AbvGr  1    0.6053 29.169 -2706.2
+## - MS.Zoning      4    0.8707 29.434 -2704.6
+## - Bldg.Type      4    0.9660 29.530 -2701.9
+## - Lot.Area       1    1.2948 29.858 -2686.7
+## - Year.Built     1    1.3833 29.947 -2684.2
+## - Neighborhood  25    4.2868 32.850 -2655.2
+## - Overall.Qual   1   16.6554 45.219 -2341.0</code></pre>
+<p>Next, we are going to use the BIC (Bayesian information criterion) criteria.</p>
+<pre class="r"><code>model_1_BIC &lt;- stepAIC(m3, k = log(n))</code></pre>
+<pre><code>## Start:  AIC=-2503.09
+## `log(price)` ~ MS.SubClass + MS.Zoning + Lot.Frontage + Lot.Area + 
+##     Neighborhood + Bldg.Type + House.Style + Overall.Qual + Year.Built + 
+##     Bedroom.AbvGr
+## 
+##                 Df Sum of Sq    RSS     AIC
+## - Neighborhood  25    4.1199 32.587 -2558.6
+## - House.Style    6    0.4450 28.912 -2530.5
+## - Bldg.Type      4    0.5651 29.032 -2513.6
+## - MS.SubClass    1    0.0366 28.504 -2508.8
+## - Lot.Frontage   1    0.0624 28.530 -2508.0
+## - MS.Zoning      4    0.8897 29.357 -2504.4
+## &lt;none&gt;                       28.467 -2503.1
+## - Bedroom.AbvGr  1    0.5618 29.029 -2493.5
+## - Lot.Area       1    1.0651 29.532 -2479.2
+## - Year.Built     1    1.3197 29.787 -2472.1
+## - Overall.Qual   1   16.2213 44.688 -2134.2
+## 
+## Step:  AIC=-2558.63
+## `log(price)` ~ MS.SubClass + MS.Zoning + Lot.Frontage + Lot.Area + 
+##     Bldg.Type + House.Style + Overall.Qual + Year.Built + Bedroom.AbvGr
+## 
+##                 Df Sum of Sq    RSS     AIC
+## - House.Style    6     0.414 33.001 -2588.4
+## - Bldg.Type      4     0.708 33.295 -2567.6
+## - MS.SubClass    1     0.019 32.606 -2564.9
+## - Lot.Frontage   1     0.247 32.834 -2559.1
+## &lt;none&gt;                       32.587 -2558.6
+## - Bedroom.AbvGr  1     0.293 32.880 -2557.9
+## - MS.Zoning      4     1.958 34.545 -2536.9
+## - Lot.Area       1     1.369 33.956 -2531.1
+## - Year.Built     1     2.239 34.826 -2510.0
+## - Overall.Qual   1    35.296 67.883 -1954.0
+## 
+## Step:  AIC=-2588.45
+## `log(price)` ~ MS.SubClass + MS.Zoning + Lot.Frontage + Lot.Area + 
+##     Bldg.Type + Overall.Qual + Year.Built + Bedroom.AbvGr
+## 
+##                 Df Sum of Sq    RSS     AIC
+## - MS.SubClass    1     0.018 33.019 -2594.7
+## - Bldg.Type      4     0.839 33.841 -2594.4
+## - Lot.Frontage   1     0.201 33.202 -2590.1
+## &lt;none&gt;                       33.001 -2588.4
+## - Bedroom.AbvGr  1     0.541 33.543 -2581.6
+## - MS.Zoning      4     1.834 34.836 -2570.3
+## - Lot.Area       1     1.373 34.375 -2561.2
+## - Year.Built     1     2.451 35.453 -2535.5
+## - Overall.Qual   1    39.407 72.409 -1940.6
+## 
+## Step:  AIC=-2594.72
+## `log(price)` ~ MS.Zoning + Lot.Frontage + Lot.Area + Bldg.Type + 
+##     Overall.Qual + Year.Built + Bedroom.AbvGr
+## 
+##                 Df Sum of Sq    RSS     AIC
+## - Bldg.Type      4     0.872 33.892 -2599.9
+## - Lot.Frontage   1     0.197 33.216 -2596.5
+## &lt;none&gt;                       33.019 -2594.7
+## - Bedroom.AbvGr  1     0.668 33.688 -2584.8
+## - MS.Zoning      4     1.816 34.836 -2577.0
+## - Lot.Area       1     1.363 34.383 -2567.7
+## - Year.Built     1     2.433 35.453 -2542.2
+## - Overall.Qual   1    39.733 72.752 -1943.4
+## 
+## Step:  AIC=-2599.9
+## `log(price)` ~ MS.Zoning + Lot.Frontage + Lot.Area + Overall.Qual + 
+##     Year.Built + Bedroom.AbvGr
+## 
+##                 Df Sum of Sq    RSS     AIC
+## &lt;none&gt;                       33.892 -2599.9
+## - Lot.Frontage   1     0.696 34.588 -2589.7
+## - Bedroom.AbvGr  1     0.763 34.655 -2588.1
+## - MS.Zoning      4     2.089 35.981 -2577.0
+## - Lot.Area       1     1.445 35.337 -2571.8
+## - Year.Built     1     1.865 35.757 -2562.0
+## - Overall.Qual   1    42.080 75.971 -1934.2</code></pre>
+<p>From the results above, we see how with the AIC criteria the selected variables in the model are:</p>
+<ul>
+<li>House Style</li>
+<li>Bedroom AbvGR</li>
+<li>MS Zoning</li>
+<li>Bldg Type</li>
+<li>Lot Area</li>
+<li>Year Built</li>
+<li>Neighborhood</li>
+<li>Overall Qual</li>
+</ul>
+<p>With the BIC criteria the selected variables are:</p>
+<ul>
+<li>Lot Frontage</li>
+<li>Bedroom AbvGgr</li>
+<li>MS Zoning</li>
+<li>Lot Area</li>
+<li>Year Built</li>
+<li>Overall Qual</li>
+</ul>
+<p>Comparing both, we notice that the second method select fewer variables for fitting the model. This probably indicates that the AIC criteria give preference to a hight R-squared whereas the BIC criteria give preference to fewer variables in the model. BIC penalizes model complexity more heavily. We can check this assumption by looking at the models.</p>
+<pre class="r"><code>summary(model_1_AIC)$r.squared</code></pre>
+<pre><code>## [1] 0.8215037</code></pre>
+<pre class="r"><code>summary(model_1_BIC)$r.squared</code></pre>
+<pre><code>## [1] 0.7882067</code></pre>
+<p>From the R-squared of both models, we see how on the AIC criteria is 0.8215 whereas on the BIC criteria the R-squared is 0.7882 confirming the statement from before.</p>
+<hr />
+</div>
+<div id="section-2.3-initial-model-residuals" class="section level3">
+<h3>Section 2.3 Initial Model Residuals</h3>
+<p>One way to assess the performance of a model is to examine the model’s residuals. In the space below, create a residual plot for your preferred model from above and use it to assess whether your model appears to fit the data well. Comment on any interesting structure in the residual plot (trend, outliers, etc.) and briefly discuss potential implications it may have for your model and inference / prediction you might produce.</p>
+<hr />
+<p>We choose the model provided by the BIC criteria.</p>
+<pre class="r"><code>model_1_BIC_aug &lt;- augment(model_1_BIC)
+
+p1_3 &lt;- ggplot(model_1_BIC_aug, aes(.resid)) + 
+  geom_histogram() +
+  xlab(&#39;Residuals&#39;)
+
+p2_3 &lt;- ggplot(model_1_BIC_aug) +
+  geom_qq(aes(sample = .std.resid)) +
+  geom_abline(slope = 1, intercept = 0, linetype = &#39;dashed&#39;) +
+  labs(x = &#39;Theoretical quantiles&#39;, y = &#39;Standardized residuals&#39;)
+
+p3_3 &lt;- ggplot(model_1_BIC_aug, aes(.fitted, .resid)) +
+  geom_point(alpha = 0.6) +
+  geom_hline(yintercept = 0, linetype = &#39;dashed&#39;) +
+  labs(x = &#39;Fitted Values&#39;, y= &#39;Residuals&#39;)
+
+grid.arrange(p3_3, arrangeGrob(p1_3, p2_3, ncol = 2), nrow = 2)</code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="final_analysis_files/figure-html/model_resid-1.png" width="672" /></p>
+<p>The plots of the residuals seem to be correct. The distribution of the residuals is centred at 0, and their variance is constant. On the other hand, the residuals are a bit left-skewed. In general, the model fit the data well.</p>
+<hr />
+</div>
+<div id="section-2.4-initial-model-rmse" class="section level3">
+<h3>Section 2.4 Initial Model RMSE</h3>
+<p>You can calculate it directly based on the model output. Be specific about the units of your RMSE (depending on whether you transformed your response variable). The value you report will be more meaningful if it is in the original units (dollars).</p>
+<hr />
+<pre class="r"><code>ames_train_nan &lt;- ames_train %&gt;%
+  dplyr::select(price, Lot.Frontage, Bedroom.AbvGr, MS.Zoning, Lot.Area, Year.Built, Overall.Qual) %&gt;%
+  na.omit()
+
+predict_BIC_train &lt;- exp(model_1_BIC$fitted.values)
+
+resid_BIC_train &lt;- ames_train_nan$price - predict_BIC_train
+
+rmse_BIC_train &lt;- sqrt(mean(resid_BIC_train^2))
+rmse_BIC_train</code></pre>
+<pre><code>## [1] 42270.09</code></pre>
+<hr />
+</div>
+<div id="section-2.5-overfitting" class="section level3">
+<h3>Section 2.5 Overfitting</h3>
+<p>The process of building a model generally involves starting with an initial model (as you have done above), identifying its shortcomings, and adapting the model accordingly. This process may be repeated several times until the model fits the data reasonably well. However, the model may do well on training data but perform poorly out-of-sample (meaning, on a dataset other than the original training data) because the model is overly-tuned to specifically fit the training data. This is called “overfitting.” To determine whether overfitting is occurring on a model, compare the performance of a model on both in-sample and out-of-sample data sets. To look at performance of your initial model on out-of-sample data, you will use the data set <code>ames_test</code>.</p>
+<pre class="r"><code>load(&quot;ames_test.Rdata&quot;)</code></pre>
+<p>Use your model from above to generate predictions for the housing prices in the test data set. Are the predictions significantly more accurate (compared to the actual sales prices) for the training data than the test data? Why or why not? Briefly explain how you determined that (what steps or processes did you use)?</p>
+<hr />
+<p>NOTE: Write your written response to section 2.5 here. Delete this note before you submit your work.</p>
+<pre class="r"><code>ames_test_nan &lt;- ames_test %&gt;%
+  dplyr::select(price, Lot.Frontage, Bedroom.AbvGr, MS.Zoning, Lot.Area, Year.Built, Overall.Qual) %&gt;%
+  na.omit()
+
+predict_BIC_test &lt;- exp(predict(model_1_BIC, ames_test_nan))
+
+resid_BIC_test &lt;- ames_test_nan$price - predict_BIC_test
+
+rmse_BIC_test &lt;- sqrt(mean(resid_BIC_test^2))
+rmse_BIC_test</code></pre>
+<pre><code>## [1] 35151.65</code></pre>
+<p>The predictions are more accurate on the test data. This is intriguing because, in theory, the model would have to provide better predictions on the train data. I have used the RSMA to compare both performances. Let’s see if the difference is significant comparing the residuals of both data sets.</p>
+<pre class="r"><code>combined_residuals &lt;- combine(resid_BIC_train, resid_BIC_test)
+
+bayes_inference(y = data, x = source, data = combined_residuals,
+                statistic = &#39;mean&#39;,
+                type = &#39;ht&#39;, alternative = &#39;twosided&#39;, null = 0,
+                show_plot = FALSE)</code></pre>
+<pre><code>## Response variable: numerical, Explanatory variable: categorical (2 levels)
+## n_resid_BIC_train = 833, y_bar_resid_BIC_train = 3662.0659, s_resid_BIC_train = 42136.4586
+## n_resid_BIC_test = 655, y_bar_resid_BIC_test = 4675.6924, s_resid_BIC_test = 34865.9161
+## (Assuming intrinsic prior on parameters)
+## Hypotheses:
+## H1: mu_resid_BIC_train  = mu_resid_BIC_test
+## H2: mu_resid_BIC_train != mu_resid_BIC_test
+## 
+## Priors:
+## P(H1) = 0.5 
+## P(H2) = 0.5 
+## 
+## Results:
+## BF[H1:H2] = 34.6349
+## P(H1|data) = 0.9719 
+## P(H2|data) = 0.0281</code></pre>
+<p>From the hypothesis test, we see that there is a 97 % probability that the residuals from the train set and the test set have the same population mean. Therefore the difference in the residuals is not significant.</p>
+<hr />
+<p><strong>Note to the learner:</strong> If in real-life practice this out-of-sample analysis shows evidence that the training data fits your model a lot better than the test data, it is probably a good idea to go back and revise the model (usually by simplifying the model) to reduce this overfitting. For simplicity, we do not ask you to do this on the assignment, however.</p>
+</div>
+</div>
+<div id="part-3-development-of-a-final-model" class="section level2">
+<h2>Part 3 Development of a Final Model</h2>
+<p>Now that you have developed an initial model to use as a baseline, create a final model with <em>at most</em> 20 variables to predict housing prices in Ames, IA, selecting from the full array of variables in the dataset and using any of the tools that we introduced in this specialization.</p>
+<p>Carefully document the process that you used to come up with your final model, so that you can answer the questions below.</p>
+<div id="section-3.1-final-model" class="section level3">
+<h3>Section 3.1 Final Model</h3>
+<p>Provide the summary table for your model.</p>
+<hr />
+<p>In a linear model, we assume that all observations in the data are generated from the same process. We are only concerned with predicting the price for houses sold under normal selling conditions, since partial and abnormal sales may have a different generating process altogether.</p>
+<pre class="r"><code>ames_train &lt;- ames_train %&gt;%
+  filter(Sale.Condition == &quot;Normal&quot;)</code></pre>
+<p>We perform a linear regression with a stepAIC selection for the final model with all the variables included in the previous section plus some new others.</p>
+<pre class="r"><code># I cannot include variables with nan values in the model
+
+m_final &lt;- lm(log(price) ~ MS.SubClass + MS.Zoning  + log(Lot.Area) + Street + Lot.Shape + Land.Slope   + log(area) + Neighborhood + Bldg.Type + House.Style + Overall.Qual + Overall.Cond + Year.Built + Bedroom.AbvGr + log(Total.Bsmt.SF + 1) + Garage.Cars + log(X1st.Flr.SF) + Central.Air + Exter.Cond + Heating.QC, data = ames_train)
+
+n &lt;- nrow(ames_train)
+
+m_final_BIC &lt;- stepAIC(m_final, k =log(n), trace = FALSE)
+
+summary(m_final_BIC)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = log(price) ~ MS.Zoning + log(Lot.Area) + Land.Slope + 
+##     log(area) + Overall.Qual + Overall.Cond + Year.Built + Bedroom.AbvGr + 
+##     log(Total.Bsmt.SF + 1) + Garage.Cars + log(X1st.Flr.SF) + 
+##     Central.Air, data = ames_train)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.53850 -0.06956  0.00038  0.06933  0.45859 
+## 
+## Coefficients:
+##                          Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)            -0.6473619  0.4931727  -1.313 0.189671    
+## MS.ZoningFV             0.3046998  0.0571623   5.330 1.27e-07 ***
+## MS.ZoningI (all)        0.1140375  0.1307057   0.872 0.383206    
+## MS.ZoningRH             0.1424474  0.0707804   2.013 0.044493 *  
+## MS.ZoningRL             0.2604453  0.0532519   4.891 1.21e-06 ***
+## MS.ZoningRM             0.2115460  0.0532339   3.974 7.70e-05 ***
+## log(Lot.Area)           0.1023117  0.0106799   9.580  &lt; 2e-16 ***
+## Land.SlopeMod           0.0767788  0.0214645   3.577 0.000368 ***
+## Land.SlopeSev           0.0931771  0.0698726   1.334 0.182731    
+## log(area)               0.4359189  0.0225649  19.318  &lt; 2e-16 ***
+## Overall.Qual            0.0866907  0.0049437  17.535  &lt; 2e-16 ***
+## Overall.Cond            0.0521897  0.0043629  11.962  &lt; 2e-16 ***
+## Year.Built              0.0032638  0.0002237  14.591  &lt; 2e-16 ***
+## Bedroom.AbvGr          -0.0406361  0.0068004  -5.976 3.42e-09 ***
+## log(Total.Bsmt.SF + 1)  0.0248840  0.0039254   6.339 3.82e-10 ***
+## Garage.Cars             0.0440783  0.0076019   5.798 9.57e-09 ***
+## log(X1st.Flr.SF)        0.1266589  0.0180462   7.019 4.72e-12 ***
+## Central.AirY            0.0564599  0.0208726   2.705 0.006973 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.1144 on 816 degrees of freedom
+## Multiple R-squared:  0.9122, Adjusted R-squared:  0.9103 
+## F-statistic: 498.4 on 17 and 816 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>The variables included in the final model are the following:</p>
+<pre class="r"><code>m_final_BIC$terms[[3]]</code></pre>
+<pre><code>## MS.Zoning + log(Lot.Area) + Land.Slope + log(area) + Overall.Qual + 
+##     Overall.Cond + Year.Built + Bedroom.AbvGr + log(Total.Bsmt.SF + 
+##     1) + Garage.Cars + log(X1st.Flr.SF) + Central.Air</code></pre>
+<p>The RMSE of the training set:</p>
+<pre class="r"><code>rmse(ames_train$price, exp(m_final_BIC$fitted.values))</code></pre>
+<pre><code>## [1] 22244.27</code></pre>
+<hr />
+</div>
+<div id="section-3.2-transformation" class="section level3">
+<h3>Section 3.2 Transformation</h3>
+<p>Did you decide to transform any variables? Why or why not? Explain in a few sentences.</p>
+<hr />
+<p>I decided to log-transform variables of area because it shows a better correlation with log(price). We perform a correlation test to check it.</p>
+<pre class="r"><code>cor.test(log(ames_train$price), log(ames_train$area))</code></pre>
+<pre><code>## 
+##  Pearson&#39;s product-moment correlation
+## 
+## data:  log(ames_train$price) and log(ames_train$area)
+## t = 33.516, df = 832, p-value &lt; 2.2e-16
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.7274993 0.7854246
+## sample estimates:
+##       cor 
+## 0.7579522</code></pre>
+<pre class="r"><code>cor.test(log(ames_train$price), ames_train$area)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s product-moment correlation
+## 
+## data:  log(ames_train$price) and ames_train$area
+## t = 32.372, df = 832, p-value &lt; 2.2e-16
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.7149648 0.7752079
+## sample estimates:
+##      cor 
+## 0.746613</code></pre>
+<hr />
+</div>
+<div id="section-3.3-variable-interaction" class="section level3">
+<h3>Section 3.3 Variable Interaction</h3>
+<p>Did you decide to include any variable interactions? Why or why not? Explain in a few sentences.</p>
+<hr />
+<p>Let’s see if there is a correlationship between some of the final explanatory variables in order to exclude them from the model.</p>
+<pre class="r"><code>df &lt;- ames_train %&gt;%
+  dplyr::select(&#39;price&#39;, &#39;MS.Zoning&#39;, &#39;Lot.Area&#39;, &#39;Land.Slope&#39;,         &#39;area&#39;, &#39;Overall.Qual&#39;, &#39;Overall.Cond&#39;, &#39;Year.Built&#39;,                 &#39;Bedroom.AbvGr&#39;, &#39;Total.Bsmt.SF&#39;, &#39;Garage.Cars&#39;, &#39;X1st.Flr.SF&#39;,       &#39;Central.Air&#39; )
+
+df_numeric &lt;- df %&gt;% 
+  dplyr::select_if(is.numeric)
+
+# correlations = cor(df, method = &quot;s&quot;)
+correlations = cor(df_numeric)
+
+
+# only want the columns that show strong correlations with price
+corr.price = as.matrix(sort(correlations[,&#39;price&#39;], decreasing = TRUE))
+
+corr.idx = names(which(apply(corr.price, 1, function(x) (x &gt; 0.5 | x &lt; -0.5))))
+
+corrplot(as.matrix(correlations[corr.idx,corr.idx]), type = &#39;upper&#39;, method=&#39;color&#39;, 
+         addCoef.col = &#39;black&#39;, tl.cex = .7,cl.cex = .7, number.cex=.7)</code></pre>
+<p><img src="final_analysis_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p>We can also see graphically the relationships between numeric variables.</p>
+<pre class="r"><code>ggpairs(df_numeric, 
+          upper = list(continuous = wrap(&#39;cor&#39;, size = 4, col = &#39;steelblue&#39;)), 
+          diag  = list(continuous = ggpairs_diag),
+          lower = list(continuous = ggpairs_lower), 
+          title = &#39;Correlation &amp; Density plot&#39;
+          )</code></pre>
+<p><img src="final_analysis_files/figure-html/unnamed-chunk-13-1.png" width="960" /></p>
+<p>We notice that Total.Bsmt.SF and X1st.Flr.SF are strongly correlated, we could exclude one of them from the model. However we will mantain both because it is not clear that including both can result in a worst performance of the model. We will check it in model testing.</p>
+<hr />
+</div>
+<div id="section-3.4-variable-selection" class="section level3">
+<h3>Section 3.4 Variable Selection</h3>
+<p>What method did you use to select the variables you included? Why did you select the method you used? Explain in a few sentences.</p>
+<hr />
+<p>First I selected 20 variables from the dataset I found would be good predictors of the price. Next, I performed a variable selection with stepwise using BIC criteria. I decided to choose BIC criteria and not AIC criteria because I want to prioritize models with fewer features.</p>
+<hr />
+</div>
+<div id="section-3.5-model-testing" class="section level3">
+<h3>Section 3.5 Model Testing</h3>
+<p>How did testing the model on out-of-sample data affect whether or how you changed your model? Explain in a few sentences.</p>
+<hr />
+<p>To consider if we have to drop one of the variables Total.Bsmt.SF or X1st.Flr.SF (because they are strongly correlated) we can see the RMSE for two different models using the test data set. One with both variables and other excluding one of them.</p>
+<pre class="r"><code>m_test_1 &lt;- lm(log(price) ~ MS.Zoning + log(Lot.Area) + Land.Slope + log(area) + Overall.Qual + Overall.Cond + Year.Built + Bedroom.AbvGr + log(Total.Bsmt.SF + 1) + Garage.Cars + log(X1st.Flr.SF) + Central.Air
+, data = ames_train)
+
+m_test_2 &lt;- lm(log(price) ~ MS.Zoning + log(Lot.Area) + Land.Slope + log(area) + Overall.Qual + Overall.Cond + Year.Built + Bedroom.AbvGr + log(Total.Bsmt.SF + 1) + Garage.Cars + Central.Air, data = ames_train)
+
+
+
+rmse1 &lt;- rmse(ames_test$price, exp(predict(m_test_1, ames_test)))
+rmse2 &lt;- rmse(ames_test$price, exp(predict(m_test_2, ames_test)))
+
+
+sprintf(&#39;The model with both variables included has a RMSE of %.2f&#39;,rmse1)</code></pre>
+<pre><code>## [1] &quot;The model with both variables included has a RMSE of 24503.44&quot;</code></pre>
+<pre class="r"><code>sprintf(&#39;The model with the variable X1st.Flr.SF excluded has a RMSE of %.2f&#39;,rmse2)</code></pre>
+<pre><code>## [1] &quot;The model with the variable X1st.Flr.SF excluded has a RMSE of 25541.33&quot;</code></pre>
+<p>From the results above we decide to include both variables in the model due to the model with both variables has a lower RMSE.</p>
+<hr />
+</div>
+</div>
+<div id="part-4-final-model-assessment" class="section level2">
+<h2>Part 4 Final Model Assessment</h2>
+<div id="section-4.1-final-model-residual" class="section level3">
+<h3>Section 4.1 Final Model Residual</h3>
+<p>For your final model, create and briefly interpret an informative plot of the residuals.</p>
+<hr />
+<pre class="r"><code>m_final_BIC_aug &lt;- augment(m_final_BIC)
+
+p_1 &lt;- ggplot(m_final_BIC_aug, aes(.resid)) +
+  geom_histogram() +
+  xlab(&#39;Residuals&#39;)
+
+p_2 &lt;- ggplot(m_final_BIC_aug) +
+  geom_qq(aes(sample = .std.resid)) +
+  geom_abline(slope = 1, intercept = 0, linetype = &#39;dashed&#39;) +
+  labs(x = &#39;Theoretical quantiles&#39;, y = &#39;Standarized residuals&#39;)
+
+p_3 &lt;- ggplot(m_final_BIC_aug, aes(.fitted, .resid)) +
+  geom_point(alpha = 0.6) +
+  geom_hline(yintercept = 0, linetype = &#39;dashed&#39;) +
+  labs(x = &#39;Fitted Values&#39;, y = &#39;Residuals&#39;)
+
+grid.arrange(p_3, arrangeGrob(p_1, p_2, ncol = 2), nrow = 2)</code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="final_analysis_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p>The residuals are centered at zero and the variance is constant. The log-tranformation applied to the response variable and to some of the features allow us to obtain a more linear model.</p>
+<hr />
+</div>
+<div id="section-4.2-final-model-rmse" class="section level3">
+<h3>Section 4.2 Final Model RMSE</h3>
+<p>For your final model, calculate and briefly comment on the RMSE.</p>
+<hr />
+<p>We calculate the Root Mean Squared Error (RMSE) of our final model on the test dataset.</p>
+<pre class="r"><code>rmse(ames_test$price, exp(predict(m_final_BIC, ames_test)))</code></pre>
+<pre><code>## [1] 24503.44</code></pre>
+<p>We have an RMSE of 24.503 dollars. In section 2.2.5 we got an RMSE of 35.151 in the test set for the initial model. It supposes an improvement of 30,29 %.</p>
+<hr />
+</div>
+<div id="section-4.3-final-model-evaluation" class="section level3">
+<h3>Section 4.3 Final Model Evaluation</h3>
+<p>What are some strengths and weaknesses of your model?</p>
+<hr />
+<p>The final model can be improved processing the missing values in the train data set and implementing a bayesian regression with a model averaging. Bayesian model averaging can be used to address model uncertainty using the ensemble of models for inference, rather than selecting a single model.</p>
+<hr />
+</div>
+<div id="section-4.4-final-model-validation" class="section level3">
+<h3>Section 4.4 Final Model Validation</h3>
+<p>Testing your final model on a separate, validation data set is a great way to determine how your model will perform in real-life practice.</p>
+<p>You will use the “ames_validation” dataset to do some additional assessment of your final model. Discuss your findings, be sure to mention: * What is the RMSE of your final model when applied to the validation data?<br />
+* How does this value compare to that of the training data and/or testing data? * What percentage of the 95% predictive confidence (or credible) intervals contain the true price of the house in the validation data set?<br />
+* From this result, does your final model properly reflect uncertainty?</p>
+<pre class="r"><code>load(&quot;ames_validation.Rdata&quot;)</code></pre>
+<hr />
+<p>For predicting the price using the data set ames_validation we need to remove those rows whose MS.Zoning value is equal to A, because our model was trained using the ames_train set and there is no property in that dataset with the value A in the feature MS.Zoning.</p>
+<pre class="r"><code>ames_validation &lt;- ames_validation %&gt;% 
+  filter(MS.Zoning != &#39;A (agr)&#39;)
+
+rmse(ames_validation$price, exp(predict(m_final_BIC, ames_validation)))</code></pre>
+<pre><code>## [1] 21816.91</code></pre>
+<p>RMSE for the different data sets:</p>
+<table>
+<thead>
+<tr class="header">
+<th>DATA SET</th>
+<th>RMSE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Train</td>
+<td>22244</td>
+</tr>
+<tr class="even">
+<td>Test</td>
+<td>24503</td>
+</tr>
+<tr class="odd">
+<td>Validation</td>
+<td>21817</td>
+</tr>
+</tbody>
+</table>
+<p>The lowest value is in the validation dataset, while the highest in the test dataset.</p>
+<pre class="r"><code>final_prediction &lt;- predict(m_final_BIC, ames_validation, interval = &quot;prediction&quot;, level = 0.95)
+coverage &lt;- mean(ames_validation$price &gt; exp(final_prediction[,&quot;lwr&quot;]) &amp; ames_validation$price &lt; exp(final_prediction[,&quot;upr&quot;]))
+coverage</code></pre>
+<pre><code>## [1] 0.9540682</code></pre>
+<p>The calculation of the 95% confidence interval reveals that the true value of properties prices is met in around 95% of the cases. That means, this final model properly reflects the uncertainty.</p>
+<hr />
+</div>
+</div>
+<div id="part-5-conclusion" class="section level2">
+<h2>Part 5 Conclusion</h2>
+<p>Provide a brief summary of your results, and a brief discussion of what you have learned about the data and your model.</p>
+<hr />
+<p>When making a linear regression model or any other type of prediction model, it is very important to analyze the data to understand them beforehand, and clean them in the appropriate manner for subsequent analysis. If this is not done, the final results may be unsatisfactory. For example, in this case we have seen how doing the logarithmic transformation of some characteristics of the data set gave us greater linearity. As well as focusing on sales considered normal, because they are what we can consider coming from the same generation process. Finally we have managed to create a model that explains the variation in the response variable quite accurately from considerably few explanatory variables.</p>
+<hr />
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

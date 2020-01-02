@@ -1,10 +1,9 @@
 ---
-title: "Untitled"
+title: "Exploratory data analysis"
 ---
 First, let us load the data and necessary packages:
 
 ```{r load, message = FALSE}
-rm(list = ls())
 load("ames_train.Rdata")
 library(MASS)
 library(dplyr)

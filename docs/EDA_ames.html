@@ -11,7 +11,7 @@
 
 
 
-<title>Untitled</title>
+<title>Exploratory data analysis</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -275,7 +275,10 @@ $(document).ready(function () {
   <a href="index.html">Home</a>
 </li>
 <li>
-  <a href="EDA_ames.html">EDA ames</a>
+  <a href="EDA_ames.html">EDA</a>
+</li>
+<li>
+  <a href="final_analysis.html">Final Analysis</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -289,14 +292,13 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Untitled</h1>
+<h1 class="title toc-ignore">Exploratory data analysis</h1>
 
 </div>
 
 
 <p>First, let us load the data and necessary packages:</p>
-<pre class="r"><code>rm(list = ls())
-load(&quot;ames_train.Rdata&quot;)
+<pre class="r"><code>load(&quot;ames_train.Rdata&quot;)
 library(MASS)
 library(dplyr)
 library(ggplot2)
@@ -470,13 +472,13 @@ ames_coef</code></pre>
 ## Bedroom.AbvGr    8.688e-02   1.078e-02   1.000e+00</code></pre>
 <pre class="r"><code>confint(ames_coef)</code></pre>
 <pre><code>##                         2.5%        97.5%          beta
-## Intercept       1.200048e+01 1.203541e+01  1.201847e+01
-## Lot.Area        7.685357e-06 1.237575e-05  1.012662e-05
-## Land.SlopeMod   0.000000e+00 2.199481e-01  1.251455e-01
-## Land.SlopeSev  -7.048825e-01 0.000000e+00 -4.128938e-01
-## Year.Built      5.278111e-03 6.776617e-03  6.046237e-03
-## Year.Remod.Add  5.725467e-03 7.894368e-03  6.788766e-03
-## Bedroom.AbvGr   6.594399e-02 1.085632e-01  8.687950e-02
+## Intercept       1.200173e+01 1.203589e+01  1.201847e+01
+## Lot.Area        7.788056e-06 1.239882e-05  1.012662e-05
+## Land.SlopeMod   0.000000e+00 2.199126e-01  1.251455e-01
+## Land.SlopeSev  -6.980619e-01 0.000000e+00 -4.128938e-01
+## Year.Built      5.311246e-03 6.775689e-03  6.046237e-03
+## Year.Remod.Add  5.739663e-03 7.862011e-03  6.788766e-03
+## Bedroom.AbvGr   6.648005e-02 1.081229e-01  8.687950e-02
 ## attr(,&quot;Probability&quot;)
 ## [1] 0.95
 ## attr(,&quot;class&quot;)
