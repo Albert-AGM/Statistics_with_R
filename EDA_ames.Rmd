@@ -1,27 +1,245 @@
 ---
 title: "Untitled"
 ---
+First, let us load the data and necessary packages:
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r load, message = FALSE}
+rm(list = ls())
+load("ames_train.Rdata")
+library(MASS)
+library(dplyr)
+library(ggplot2)
+library(BAS)
+library(broom)
 ```
 
-## R Markdown
+#
+Make a labeled histogram (with 30 bins) of the ages of the houses in the data set, and describe the distribution.
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+```{r Q1}
+# type your code for Question 1 here, and Knit
+ames_train <- ames_train %>% 
+  mutate(ages = 2019 - Year.Built) 
 
-```{r cars}
-summary(cars)
+ggplot(ames_train,aes(ages)) +
+  geom_histogram(aes(y = ..density..), bins = 30, colour = 'black', fill = 'white') +
+    geom_density(fill="blue", alpha = 0.2) + 
+  labs(x = 'Ages of the houses in years', y = 'Number of houses', title = 'Ages of the houses in the data set (Acutal year - Year built)')  + 
+  scale_x_continuous(breaks = seq(0,160,10)) 
+
+  
+
+ames_train %>% 
+  summarise(mean = mean(ages), median = median(ages), sd = sd(ages))
+
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+* * *
+
+**ANSWER:** From the histogram above, we can see:
+
+* The distribution of ages of the houses in the data set is right-skewed, logically we have a boundary on year 0. 
+* There are many houses around 15 years old whereas the mean is 46,8 and the median 44.
+* Surprisingly there is a gap between houses of 25 and 40 years, that deserve further investigation because maybe it was a period where few houses were constructed.
+
+* * *
+
+
+#
+The mantra in real estate is "Location, Location, Location!" Make a graphical display that relates a home price to its neighborhood in Ames, Iowa. Which summary statistics are most appropriate to use for determining the most expensive, least expensive, and most heterogeneous (having the most variation in housing price) neighborhoods? Report which neighborhoods these are based on the summary statistics of your choice. Report the value of your chosen summary statistics for these neighborhoods.
+
+
+```{r Q2}
+# type your code for Question 2 here, and Knit
+
+df1 <- ames_train %>% 
+  group_by(Neighborhood) %>% 
+  summarise(mean = mean(price), median = median(price), sd = sd(price))
+
+df1 %>% 
+  arrange(desc(median)) %>% 
+  select(Neighborhood, median) %>% 
+  slice(1:5)
+
+df1 %>% 
+  arrange(median) %>% 
+  select(Neighborhood, median) %>% 
+  slice(1:5)
+
+df1 %>% 
+  arrange(desc(sd)) %>% 
+  select(Neighborhood, sd) %>% 
+  slice(1:5)
+
+ggplot(ames_train, aes(Neighborhood, price / 1000)) +
+  geom_boxplot(aes(colour = Neighborhood)) +
+  theme(axis.text.x = element_text(angle = 90)) +
+  theme(legend.position = "none") +
+  labs(y = 'Price (in thousand of dollars)', title = 'Price by Neighborhood')
+
+
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+* * *
+
+**ANSWER:** The summary statistic most appropiate for determining the most expensive and least expensive neighborhoods is the median, because it is not very affected by outliers. The most appropiate for determining heterogeneous neighborhood is the standard deviation.
+
+* Most expensive -> StoneBr
+* Least expensive -> MeadowV
+* Most heterogeneous -> StoneBr
+
+
+
+* * *
+
+# 
+
+Which variable has the largest number of missing values? Explain why it makes sense that there are so many missing values for this variable.
+
+```{r Q3}
+# type your code for Question 3 here, and Knit
+sort(colSums(is.na(ames_train)), decreasing = TRUE)[1:5]
+```
+
+
+* * *
+
+**ANSWER:** The variable with more missing values is Pool Quality. This is because when the house does not have a swimming pool it appears on the dataset as nan. Therefore in the dataset there are 997 houses without a swimming pool.
+
+
+* * *
+
+#
+
+We want to predict the natural log of the home prices. Candidate explanatory variables are lot size in square feet (Lot.Area), slope of property (Land.Slope), original construction date (Year.Built), remodel date (Year.Remod.Add), and the number of bedrooms above grade (Bedroom.AbvGr). Pick a model selection or model averaging method covered in the Specialization, and describe how this method works. Then, use this method to find the best multiple regression model for predicting the natural log of the home prices.
+
+
+```{r Q4}
+# type your code for Question 4 here, and Knit
+lm_bas = bas.lm(log(price) ~ Lot.Area + Land.Slope + Year.Built + Year.Remod.Add + Bedroom.AbvGr, data = ames_train,
+                prior = 'BIC',
+                modelprior = uniform())
+
+round(summary(lm_bas), 3)
+print(lm_bas)
+
+image(lm_bas, rotate = F)
+
+ames_coef = coef(lm_bas)
+ames_coef
+confint(ames_coef)
+
+
+# best = which.max(lm_bas$logmarg)
+# bestmodel = lm_bas$which[[best]] + 1
+# plot(ames_coef, subset = c(bestmodel), ask = FALSE)
+
+plot(confint(ames_coef, parm = 2:ames_coef$n.vars))
+
+
+```
+
+* * *
+
+**ANSWER:** In order to do model averaging we use the BAS package. To represent model uncertainty, we need to construct a probability distribution over all possible models where each probability provides measure of how likely the model is to happen.
+
+From the information above, we can conclude that the best model include all the vairables:
+
+log(price) ~ Lot.Area + Land.Slope + Year.Built + Year.Remod.Add + Bedroom.AbvGr
+
+The posterior probability of the best model is 0.904, and the R-squared associated is 0.562 what means that the 56% of the variance on the response variable is explained by the model.
+
+The coefficients of each variable are represented in the table and plot below with a confidence interval of 95%.
+
+
+
+
+* * *
+
+#
+
+Which home has the largest squared residual in the previous analysis (Question 4)? Looking at all the variables in the data set, can you explain why this home stands out from the rest (what factors contribute to the high squared residual and why are those factors relevant)?
+
+
+```{r Q5}
+# type your code for Question 5 here, and Knit
+plot(lm_bas, which = 1)
+
+house_428 <- ames_train %>%
+  slice(428)
+```
+
+* * *
+
+**ANSWER:** The home with the larges squared residual is the number 428. With the following characteristics:
+
+ * Lot Area: 9656
+ * Land Slope: Gentle slope
+ * Year Built: 1920
+ * Year Remod: 1970
+ * Bedrrom AbvGr: 2
+
+The residual is negative, what means we have predicted the price upper the real price of the house. Looking at the dataset we know that the house is very old and the overall quality and overall condition is poor. So it would be interesting to introduce one of both characteristics in the model to predict better its value.
+
+* * *
+
+#
+
+Use the same model selection method you chose in Question 4 to again find the best multiple regression model to predict the natural log of home prices, but this time **replacing Lot.Area with log(Lot.Area)**. Do you arrive at a model including the same set of predictors?
+
+
+```{r Q6}
+# type your code for Question 6 here, and Knit
+lm_bas_2 = bas.lm(log(price) ~ log(Lot.Area) + Land.Slope + Year.Built + Year.Remod.Add + Bedroom.AbvGr, data = ames_train,
+                prior = 'BIC',
+                modelprior = uniform())
+
+round(summary(lm_bas), 3)
+
+round(summary(lm_bas_2), 3)
+```
+
+**ANSWER:** We do not arrive to the same model. This time the predictor Land Slope is not included in the model. It goes from having a probability of being included in the model from 0.904 to 0.023. Notice with this new model the R-squared increases to 0.603, therefore this model is able to explain better the variance on the response variable.
+
+* * *
+
+#
+
+Do you think it is better to log transform Lot.Area, in terms of assumptions for linear regression? Make graphs of the predicted values of log home price versus the true values of log home price for the regression models selected for Lot.Area and log(Lot.Area). Referencing these two plots, provide a written support that includes a quantitative justification for your answer in the first part of question 7.
+
+```{r Q7}
+# type your code for Question 7 here, and Knit
+predicted_values <- predict(lm_bas, estimator = 'BPM', se.fit = TRUE)
+
+predicted_values_log <- predict(lm_bas_2, estimator = 'BPM', se.fit = TRUE)
+
+ames_train$predicted_price = predicted_values$fit
+ames_train$predicted_price_log = predicted_values_log$fit
+
+
+ggplot(ames_train, aes(predicted_price, log(price))) +
+  geom_point()
+
+ggplot(ames_train, aes(predicted_price_log, log(price))) +
+  geom_point()
+
+par(mfrow = c(2,2))
+
+plot(lm_bas)
+
+
+plot(lm_bas_2)
+
+
+```
+
+* * *
+
+**ANSWER:** In both models, the linearity and variance of the residuals are met. In the model with log(Lot.Area) the R-squared is higher and the model also has fewer predictors (the model is simplest). So we can conclude that is better to log transform Lot.Area.
+
+* * *
+###
