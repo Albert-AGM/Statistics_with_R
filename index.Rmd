@@ -1,0 +1,6 @@
+---
+title: "Statistics with R"
+
+---
+
+Este es el indice

@@ -1,0 +1,11 @@
+name: "Statistics with R"
+output_dir: "docs"
+navbar:
+  title: "Statistics with R"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "EDA ames"
+      href: EDA_ames.html
+output:
+  html_document:
