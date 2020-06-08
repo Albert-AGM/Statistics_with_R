@@ -7,7 +7,7 @@ Skills used:
 * Statistical Inference
 * R Programming
 
-Check it out: https://albert-agm.github.io/Statistics_with_R/
+Check it out: https://albert-gm.github.io/Statistics_with_R/
 
 Course: https://www.coursera.org/specializations/statistics
 
